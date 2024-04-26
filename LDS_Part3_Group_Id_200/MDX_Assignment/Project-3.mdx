@@ -1,0 +1,127 @@
+--Assignment 1
+--Show the percentage increase or decrease in total crime gravity with respect to the
+--previous year for each state.
+
+select {[Measures].percent_diff, [Measures].[Crime Gravity], [Measures].prev_year_crime_gravity} on columns,
+nonempty(([Date].[day_month_year].[The Year], [Geography].[State].[State])) on rows
+from [Group_ID_200_DB]
+
+--or
+
+with member prev_year_crime_gravity  as
+([Date].[day_month_year].currentmember.lag(1), [Measures].[Crime Gravity])
+
+member percent_diff as
+IIF(
+                 IsEmpty([Date].[day_month_year].currentmember.lag(1))
+                 OR IsEmpty([Measures].[prev_year_crime_gravity])
+                 OR [Measures].[prev_year_crime_gravity] = 0,
+                 0,
+                 ([Measures].[Crime Gravity] - prev_year_crime_gravity)/
+                 prev_year_crime_gravity), format_string="percent"
+
+select {percent_diff, [Measures].[Crime Gravity], prev_year_crime_gravity} on columns,
+nonempty(([Date].[day_month_year].[The Year], [Geography].[State].[State])) on rows
+from [Group_ID_200_DB]
+
+
+--Assignment 2
+--For each gun, show the total crime gravity in percentage with respect to the total
+--crime gravity of all the guns.
+with member total_crime_gravity as 
+[Measures].[Crime Gravity] / sum([Gun].[Gun Id].members, [Measures].[Crime Gravity]), format_string="percent"
+
+select {[Measures].[Crime Gravity], total_crime_gravity} on columns,
+nonempty([Gun].[Gun Id].[Gun Id]) on rows
+from [Group_ID_200_DB]
+
+--or
+
+with member total_crime_gravity as 
+[Measures].[Crime Gravity] / sum([Gun].[Gun Id].[Gun Id], [Measures].[Crime Gravity])
+
+select {[Measures].[Crime Gravity], [Measures].[total_crime_gravity]} on columns,
+nonempty([Gun].[Gun Id].[Gun Id]) on rows
+from [Group_ID_200_DB]
+
+
+--Assignment 3
+--Show the incidents having a total gravity score greater or equal to the average
+--gravity score in each state.
+
+with set incidents as
+filter([Incident].[Incident Id].[Incident Id], [Measures].[Crime Gravity] >= [Measures].[Average_Gravity_Score])
+select {[Measures].[Crime Gravity], [Measures].[Average_Gravity_Score]} on columns,
+nonempty(([Geography].[Geography].[State], [Incident].[Incident Id].[Incident Id])) on rows
+from [Group_ID_200_DB]
+
+--trial1 
+with set incidents as
+filter([Incident].[Incident Id].[Incident Id], [Measures].[Crime Gravity] >= [Measures].[Average_Gravity_Score])
+select {[Measures].[Crime Gravity], [Measures].[Average_Gravity_Score]} on columns,
+nonempty(([Geography].[Geography].[State], incidents)) on rows
+from [Group_ID_200_DB]
+
+with member Average_Gravity_Score as
+sum(([Geography].[Geography].currentmember, [Incident].[Incident Id].currentmember.parent, [Measures].[Crime Gravity]),
+[Measures].[Crime Gravity])
+
+select {[Measures].[Crime Gravity],Average_Gravity_Score} on columns,
+(nonempty([Geography].[Geography].[State], [Incident].[Incident Id].[Incident Id])) on rows
+from [Group_ID_200_DB]
+
+
+--final try
+with member Average_Gravity_Score as
+([Geography].[Geography].currentmember*[Incident].[Incident Id].members, [Measures].[Crime Gravity])
+     
+
+select {[Measures].[Crime Gravity], Average_Gravity_Score} on columns,
+NonEmpty(
+  ([Geography].[Geography].[State], [Incident].[Incident Id].[Incident Id]),
+  [Measures].[Crime Gravity]
+) on rows
+from [Group_ID_200_DB]
+
+
+WITH MEMBER [Measures].[Average Gravity Score] AS
+    Avg(
+        [Incident].[Incident Id].members,
+        [Measures].[Crime Gravity]
+    )
+
+
+
+
+WITH 
+  MEMBER [Measures].[Average Gravity Score] AS
+    AVG(
+        [Geography].[Geography].[State].MEMBERS,
+        [Measures].[Crime Gravity]
+    )
+
+MEMBER [Measures].[Number of Incidents] AS
+    COUNT(
+        [Incident].[Incident Id].[Incident Id].MEMBERS
+    )
+
+SET [Filtered Incidents] AS
+    FILTER(
+        [Incident].[Incident Id].[Incident Id].MEMBERS,
+        [Measures].[Crime Gravity] >= [Measures].[Average Gravity Score]
+    )
+
+SELECT
+    {[Measures].[Crime Gravity], [Measures].[Average Gravity Score], [Measures].[Number of Incidents]} ON COLUMNS,
+    ([Geography].[State].[State].MEMBERS,[Filtered Incidents]) ON ROWS
+FROM [Group_ID_200_DB]
+
+
+
+
+
+
+
+
+
+
