@@ -44,8 +44,8 @@ The repository (`Gun_Violence_Data_Warehouse_SQL`) contains the following files 
 - **`Project_Report.pdf`**:
   - The comprehensive project report detailing methodologies, implementation details, results, and visualizations for all three parts of the project.
 
-- **`README.md`**:
-  - The main README file providing an overview of the project, problem statement, dataset details, analysis phases, key findings, tools, and usage instructions.
+- **`readme.md`**:
+  - The readme file providing an overview of the project, problem statement, dataset details, analysis phases, key findings, tools, and usage instructions.
 
 ---
 
