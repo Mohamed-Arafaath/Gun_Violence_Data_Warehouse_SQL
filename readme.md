@@ -2,7 +2,7 @@
 ![Gun Violence Data Warehouse Schema](DW_Schema.jpg)
 
 ## Overview
-This repository contains the implementation of a comprehensive data warehouse project conducted as part of the Master's Degree in Data Science and Business Informatics at the University of Pisa. The project, titled "Gun Violence Data Warehouse," focuses on building a robust data warehouse to store and analyze gun violence incidents in the United States from January 2013 to March 2018. It leverages SQL Server Management Studio (SSMS), SQL Server Integration Services (SSIS), and multidimensional data analysis techniques to process, integrate, and analyze data, providing insights into crime gravity, youth criminality, and gun-related incidents. The project is divided into three main parts: data warehouse construction, SSIS-based data flows, and multidimensional analysis with Power BI visualizations.
+This repository contains the implementation of a comprehensive data warehouse project conducted as part of the Data Analyst Internship at K3 Progetti e soluzioni, Italy. The project, titled "Gun Violence Data Warehouse," focuses on building a robust data warehouse to store and analyze gun violence incidents in the United States from January 2013 to March 2018. It leverages SQL Server Management Studio (SSMS), SQL Server Integration Services (SSIS), and multidimensional data analysis techniques to process, integrate, and analyze data, providing insights into crime gravity, youth criminality, and gun-related incidents. The project is divided into three main parts: data warehouse construction, SSIS-based data flows, and multidimensional analysis with Power BI visualizations.
 
 ---
 
